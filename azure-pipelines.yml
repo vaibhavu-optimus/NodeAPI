@@ -1,17 +1,24 @@
 trigger:
-- main
+ branches:
+   include:
+     - main
 
 pr:
-- main
+ branches:
+   include:
+     - main
+
+variables:
+  nodeVersion: '18.18.1'
 
 pool:
   vmImage: ubuntu-latest
 
 stages:
-  - stage: Build and Test
+  - stage: BuildAndTest
     displayName: 'Build and Test Stage'
     jobs:
-      - job: Build
+      - job: BuildAndTestJob
         steps:
           - task: NodeTool@0
             inputs:
