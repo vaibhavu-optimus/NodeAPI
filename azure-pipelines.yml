@@ -1,0 +1,41 @@
+trigger:
+- main
+
+pr:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: Build and Test
+    displayName: 'Build and Test Stage'
+    jobs:
+      - job: Build
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '$(nodeVersion)'
+            displayName: 'Install NodeJS'
+
+          - script: |
+              npm install
+            displayName: 'Install Dependencies'
+
+          - script: |
+              npm run test
+            displayName: 'Run Tests'
+
+          - task: ArchiveFiles@2
+            inputs:
+             rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+             includeRootFolder: false
+             archiveType: 'zip'
+             archiveFile: '$(Build.ArtifactStagingDirectory)/app.zip'
+             replaceExistingArchive: true
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)/app.zip'
+              ArtifactName: 'drop'
+              publishLocation: 'Container'
