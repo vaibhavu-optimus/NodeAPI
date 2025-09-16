@@ -3,6 +3,10 @@ const app = express();
 
 app.use(express.json());
 
+app.get('/api/health', (req, res) => {
+  res.send({ status: 'healthy', health: '100%', time: new Date().toISOString() });
+});
+
 app.get('/', (req, res) => {
   res.send('Hello from Express!');
 });
